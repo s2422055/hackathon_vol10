@@ -1,87 +1,83 @@
 <?php
+// ▼▼▼ この3行を追加してください ▼▼▼
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+// ▲▲▲ ここまでを追加 ▲▲▲
+
 require_once 'db.php';
 
+// データベースに接続
 $pdo = connectDatabase();
 
+// フォームがPOSTメソッドで送信されたかを確認
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // 送信されたデータを取得
     $username = trim($_POST['username'] ?? '');
     $password1 = $_POST['password1'] ?? '';
     $password2 = $_POST['password2'] ?? '';
-    $field = trim($_POST['field'] ?? ''); // 興味のある分野
 
-    // 空チェック
-    if (empty($username) || empty($password1) || empty($password2) || empty($field)) {
+    // 入力が空でないかチェック
+    if (empty($username) || empty($password1) || empty($password2)) {
         echo "<p>すべてのフィールドを入力してください。</p>";
         echo "<a href=\"./regform.html\">戻る</a>";
         exit();
     }
 
-    // 長さチェック（20文字以内）
-    if (
-        mb_strlen($username) > 20 ||
-        mb_strlen($password1) > 20 ||
-        mb_strlen($password2) > 20 ||
-        mb_strlen($field) > 100 // 任意の制限、適宜変更可
-    ) {
-        echo "<p>各入力欄は適切な長さで入力してください（例: ユーザー名とパスワードは20文字以内）。</p>";
-        echo "<a href=\"./regform.html\">戻る</a>";
-        exit();
-    }
-
-    // パスワード一致チェック
+    // パスワードが一致するかチェック
     if ($password1 !== $password2) {
         echo "<p>パスワードが一致しません。</p>";
         echo "<a href=\"./regform.html\">戻る</a>";
         exit();
     }
 
-    // ユーザー名の重複チェック
-    $stmt = $pdo->prepare("SELECT COUNT(*) FROM group2_users WHERE username = :username");
+    // --- ここからがご要望の核心部分です ---
+
+    // ▼ 要望2: ユーザー名の重複チェック
+    // データベースに同じユーザー名が存在しないか確認する
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM hackathon10_users WHERE username = :username");
     $stmt->bindValue(':username', $username, PDO::PARAM_STR);
     $stmt->execute();
     $userExists = $stmt->fetchColumn();
 
+    // ユーザー名が既に存在する場合 (カウントが0より大きい場合)
     if ($userExists > 0) {
+        // メッセージを表示して処理を終了する
         echo "<p>このユーザー名はすでに使われています。</p>";
         echo "<a href=\"./regform.html\">戻る</a>";
         exit();
     }
 
-    // パスワードをハッシュ化
+    // --- ここまでがご要望の核心部分です ---
+
+
+    // パスワードを安全な形式にハッシュ化
     $hashedPassword = password_hash($password1, PASSWORD_DEFAULT);
 
-    // ユーザー登録
+    // データベースに新しいユーザーを登録
     $stmt = $pdo->prepare("
-        INSERT INTO group2_users (username, password, field, points)
-        VALUES (:username, :password, :field, 0)
+        INSERT INTO hackathon10_users (username, password)
+        VALUES (:username, :password)
     ");
     $stmt->bindValue(':username', $username, PDO::PARAM_STR);
     $stmt->bindValue(':password', $hashedPassword, PDO::PARAM_STR);
-    $stmt->bindValue(':field', $field, PDO::PARAM_STR);
 
+    // 登録処理を実行
     if ($stmt->execute()) {
-        // affiliation にも登録する
-        $stmt2 = $pdo->prepare("
-            INSERT INTO affiliation (username)
-            VALUES (:username)
-        ");
-        $stmt2->bindValue(':username', $username, PDO::PARAM_STR);
-        if ($stmt2->execute()) {
-            header('Location: login.html');
-            exit();
-        } else {
-            echo "<p>affiliationテーブルへの登録に失敗しました。</p>";
-            echo "<a href=\"./regform.html\">戻る</a>";
-            exit();
-        }
+        // ▼ 要望1: 登録成功時にログインページへ移動
+        // header()関数を使って、ユーザーのブラウザを login.html にリダイレクトさせる
+        header('Location: login.html');
+        exit(); // リダイレクト後は必ず exit() を実行する
     } else {
-        echo "<p>group2_usersへの登録に失敗しました。</p>";
+        // データベースへの登録が失敗した場合
+        echo "<p>ユーザー登録に失敗しました。</p>";
         echo "<a href=\"./regform.html\">戻る</a>";
         exit();
     }
 
 } else {
-    header('Location: register.html');
+    // POST以外の方法でアクセスされた場合は、登録フォームにリダイレクト
+    header('Location: regform.html');
     exit();
 }
 ?>

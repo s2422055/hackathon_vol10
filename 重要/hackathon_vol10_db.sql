@@ -1,8 +1,27 @@
 DROP TABLE IF EXISTS hackathon10_users;
+DROP TABLE IF EXISTS hackathon10_logs;
+DROP TABLE IF EXISTS hackathon10_animals;
 
--- ユーザー情報テーブル
 CREATE TABLE hackathon10_users (
-    id INT PRIMARY KEY,
-    username TEXT NOT NULL,
-    password TEXT NOT NULL
+    id SERIAL PRIMARY KEY,
+    username TEXT,
+    password TEXT, -- password_hash()で暗号化して保存
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE hackathon10_logs (
+    log_id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES hackathon10_users(id) ON DELETE CASCADE,
+    animal_id INTEGER NOT NULL REFERENCES hackathon10_animals(animal_id) ON DELETE CASCADE,
+    role TEXT NOT NULL,   -- "user" または "assistant"
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE hackathon10_animals (
+    animal_id SERIAL PRIMARY KEY,
+    name TEXT, -- 動物名
+    description TEXT -- 説明やキャラ設定
 );

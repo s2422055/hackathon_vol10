@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title>登録フォーム</title>
+
+    <style>
+        body {
+            font-family: 'Sawarabi Mincho', serif;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            max-width: 400px;
+            margin: 80px auto;
+            padding: 30px 40px;
+            border-radius: 15px;
+            border: 3px solid #D2691E;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        h1 {
+            color: #8B0000;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #999;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #D2691E;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #a0522d;
+        }
+
+        p {
+            margin-top: 20px;
+            color: #444;
+        }
+
+        a {
+            color: #8B0000;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <h1>登録</h1>
+
+        <form method="POST" action="./regform.php">
+
+            <br>ユーザ名: <input type="text" id="username" name="username" size="40" required /></br>
+            <br>パスワード: <input type="password" id="password1" name="password1" size="40" required /></br>
+            <br>パスワード(確認): <input type="password" id="password2" name="password2" size="40" required /></br>
+
+            <br>興味のある分野:
+            <select name="field" id="field" required>
+                <option value="">--選択してください--</option>
+                <option value="経済">経済</option>
+                <option value="政治">政治</option>
+                <option value="文化">文化</option>
+                <option value="ライフ">ライフ</option>
+                <option value="医療">医療</option>
+                <option value="イベント">イベント</option>
+                <option value="エンタメ">エンタメ</option>
+                <option value="スポーツ">スポーツ</option>
+                <option value="IT・ネット">IT・ネット</option>
+                <option value="グルメ">グルメ</option>
+            </select>
+            </br>
+
+            <br><button type="submit">登録</button></br>
+
+        </form>
+        <p>すでに登録している方は<a href="./login.html">こちら</a>からログインしてください。</p>
+    </div>
+
+</body>
+
+</html>

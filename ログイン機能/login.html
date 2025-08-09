@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ログイン</title>
+    <style>
+        body {
+            font-family: 'Sawarabi Mincho', serif;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            max-width: 400px;
+            margin: 80px auto;
+            padding: 30px 40px;
+            border-radius: 15px;
+            border: 3px solid #D2691E;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        h1 {
+            color: #8B0000;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #999;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #D2691E;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #a0522d;
+        }
+
+        p {
+            margin-top: 20px;
+            color: #444;
+        }
+
+        a {
+            color: #8B0000;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <h1>ログイン</h1>
+
+        <form method="POST" action="./login.php">
+            <input type="text" name="username" placeholder="ユーザー名" required><br>
+            <input type="password" name="password" placeholder="パスワード" required><br>
+            <button type="submit">ログイン</button>
+        </form>
+    
+        <p>はじめての方は <a href="./regform.html">こちら</a> から登録してください。</p>
+    </div>
+
+</body>
+</html>

@@ -16,7 +16,7 @@ function checkLogin() {
 function loginUser($username, $password) {
     $pdo = connectDatabase();
 
-    $stmt = $pdo->prepare("SELECT * FROM group2_users WHERE username = :username");
+    $stmt = $pdo->prepare("SELECT * FROM hackathon10_users WHERE username = :username");
     $stmt->bindValue(':username', $username, PDO::PARAM_STR);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);

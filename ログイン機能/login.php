@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $stmt = $pdo->prepare("SELECT password FROM group2_users WHERE username = :username");
+    $stmt = $pdo->prepare("SELECT password FROM hackathon10_users WHERE username = :username");
     $stmt->bindValue(':username', $username, PDO::PARAM_STR);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);

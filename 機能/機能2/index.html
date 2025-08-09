@@ -2,130 +2,230 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>猫チャットAI</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
+
+/* カラーパレットと基本設定 */
+:root {
+    --bg-color: #fdf8f5;                     /* 背景: 暖色系のオフホワイト */
+    --header-bg: #ffffff;                    /* ヘッダー: クリーンな白 */
+    --bubble-user-bg: #e1f0e8;               /* あなたの吹き出し: 落ち着いたセージグリーン */
+    --bubble-cat-bg: #ffffff;                /* 猫の吹き出し: クリーンな白 */
+    --accent-color: #8d6e63;                 /* アクセント: 温かみのあるブラウン */
+    --accent-hover-color: #795548;           /* アクセント(ホバー): 少し濃いブラウン */
+    --text-color: #424242;                   /* 文字: 読みやすいチャコールグレー */
+    --border-color: #eeeeee;                 /* 境界線: 明るいグレー */
+    --focus-ring-color: #a1887f;             /* フォーカスリング: ブラウン系 */
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'M PLUS Rounded 1c', sans-serif;
-    background-color: #fff0f5;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     margin: 0;
     display: flex;
     flex-direction: column;
     height: 100vh;
 }
+
+/* アクセシビリティ：視覚的に隠しつつ、スクリーンリーダーには読ませる */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ヘッダー */
 header {
-    background-color: #ffb6c1;
-    padding: 10px 20px; /* 少し余白を調整 */
-    border-bottom: 3px solid #ff69b4;
-    /* ▼▼▼ 以下を追加 ▼▼▼ */
+    background-color: var(--header-bg);
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
-.chat-box {
-    flex: 1;
-    padding: 10px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-}
-.message {
-    max-width: 70%;
-    margin: 8px 0;
-    padding: 10px;
-    border-radius: 15px;
-}
-.user {
-    background-color: #ffdab9;
-    align-self: flex-end;
-}
-.cat {
-    background-color: #ffe4e1;
-    align-self: flex-start;
-}
-.input-area {
-    display: flex;
-    padding: 10px;
-    border-top: 2px solid #ff69b4;
-}
-input {
-    flex: 1;
-    padding: 10px;
-    border: 2px solid #ff69b4;
-    border-radius: 20px;
-    outline: none;
-}
-button {
-    margin-left: 10px;
-    padding: 10px 20px;
-    background-color: #ff69b4;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-}
-button:hover {
-    background-color: #ff1493;
-}
-.chat-container {
-    display: flex;
-    flex-direction: column;
-}
+
 .header-title {
-    font-size: 1.5em;
-    font-weight: bold;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--accent-color);
 }
 
 .nav-buttons {
     display: flex;
     align-items: center;
-    gap: 15px; /* ボタン間のスペース */
+    gap: 15px;
 }
 
 .nav-btn {
     display: inline-block;
     padding: 8px 16px;
-    background-color: #f48fb1;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 700;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+.nav-btn:hover {
+    background-color: var(--accent-hover-color);
+}
+
+.logout-btn {
+    background-color: #9e9e9e; /* ログアウトボタン: 主張しすぎないミディアムグレー */
+}
+
+.logout-btn:hover {
+    background-color: #757575;
+}
+
+/* チャットエリア */
+.chat-box {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message {
+    max-width: 75%;
+    padding: 10px 15px;
+    border-radius: 18px;
+    line-height: 1.5;
+    word-wrap: break-word;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+/* 吹き出しのしっぽ */
+.message::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+}
+
+.user {
+    background-color: var(--bubble-user-bg);
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+.user::before {
+    right: -10px;
+    border-left-color: var(--bubble-user-bg);
+    border-bottom-color: var(--bubble-user-bg);
+}
+
+.cat {
+    background-color: var(--bubble-cat-bg);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+}
+.cat::before {
+    left: -10px;
+    border-right-color: var(--bubble-cat-bg);
+    border-bottom-color: var(--bubble-cat-bg);
+}
+
+/* 入力エリア */
+.input-area {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--header-bg);
+    gap: 10px;
+}
+
+#message {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 1em;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.send-btn {
+    padding: 10px 20px;
+    background-color: var(--accent-color);
     color: white;
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    text-decoration: none; /* リンクの下線を消す */
-    font-size: 0.9em;
-    font-weight: bold;
-    transition: background-color 0.2s;
+    font-weight: 700;
+    font-family: inherit;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+.send-btn:hover {
+    background-color: var(--accent-hover-color);
 }
 
-.nav-btn:hover {
-    background-color: #ec407a;
+/* アクセシビリティ：キーボード操作用のフォーカススタイル */
+:is(a, button, input):focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--bg-color), 0 0 0 5px var(--focus-ring-color);
 }
 
-.logout-btn {
-    background-color: #ef9a9a; /* ログアウトボタンだけ少し色を変える */
-}
-
-.logout-btn:hover {
-    background-color: #e57373;
+main {
+    flex: 1; /* ヘッダー以外の残り全ての高さを確保 */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* main自体がスクロールしないようにするため */
 }
 </style>
 </head>
 <body>
 <header>
-    <span class="header-title">🐾 猫AIチャット 🐾</span>
-    <div class="nav-buttons">
-        <a href="homepage.php" class="nav-btn">動物選択に戻る</a>
-        <form action="logout.php" method="POST" style="margin: 0;">
-            <button type="submit" class="nav-btn logout-btn">ログアウト</button>
-        </form>
-    </div>
+    <span class="header-title">🐾 猫チャットAI</span>
+    <nav aria-label="メインナビゲーション">
+        <div class="nav-buttons">
+            <a href="homepage.php" class="nav-btn">動物選択に戻る</a>
+            <form action="logout.php" method="POST" style="margin: 0;">
+                <button type="submit" class="nav-btn logout-btn">ログアウト</button>
+            </form>
+        </div>
+    </nav>
 </header>
-<div class="chat-box" id="chatBox"></div>
-<div class="input-area">
-    <input type="text" id="message" placeholder="にゃー？（入力してにゃ）">
-    <button onclick="sendMessage()">送信</button>
-</div>
+
+<main>
+    <div class="chat-box" id="chatBox" role="log" aria-live="polite"></div>
+
+    <form class="input-area" id="chatForm">
+        <label for="message" class="visually-hidden">メッセージ入力</label>
+        <input type="text" id="message" placeholder="メッセージを入力…">
+        <button type="submit" class="send-btn" aria-label="メッセージを送信">送信</button>
+    </form>
+</main>
 
 <script>
+// チャットフォームの送信イベントを監視
+const chatForm = document.getElementById('chatForm');
+chatForm.addEventListener('submit', function(event) {
+    event.preventDefault(); // フォームのデフォルトの送信をキャンセル
+    sendMessage();
+});
+
 async function sendMessage() {
     const input = document.getElementById('message');
     const message = input.value.trim();
@@ -133,15 +233,23 @@ async function sendMessage() {
 
     addMessage(message, 'user');
     input.value = '';
+    input.focus(); // 送信後も入力欄にフォーカスを戻す
 
-    const res = await fetch('chat.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({message})
-    });
-    const data = await res.json();
-
-    addMessage(data.reply || "にゃー？（エラーだにゃ）", 'cat');
+    try {
+        const res = await fetch('chat.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({message})
+        });
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await res.json();
+        addMessage(data.reply || "にゃー？（エラーだにゃ）", 'cat');
+    } catch (error) {
+        console.error('Fetch error:', error);
+        addMessage("ごめんにゃ、通信に失敗したにゃ…", 'cat');
+    }
 }
 
 function addMessage(text, type) {
@@ -150,7 +258,11 @@ function addMessage(text, type) {
     msg.className = `message ${type}`;
     msg.textContent = text;
     chatBox.appendChild(msg);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    // スムーズなスクロール
+    chatBox.scrollTo({
+        top: chatBox.scrollHeight,
+        behavior: 'smooth'
+    });
 }
 </script>
 </body>

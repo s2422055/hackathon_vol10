@@ -2,78 +2,144 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>ログイン</title>
-    <body>
-
-    <header class="site-header">
-        <h2>animal talk</h2>
-    </header>
-
-
+    <title>ログイン | Animal Talk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
+        
+        /* 粒子アニメーションの定義 */
+        @keyframes particle-flow {
+            from {
+                transform: translateY(100vh) scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-10vh) scale(0.5);
+                opacity: 0;
+            }
+        }
 
-    @import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'M PLUS Rounded 1c', 'Sawarabi Mincho', serif;
-            background-size: cover;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
             margin: 0;
-            padding: 0;
-        }
-        .site-header h2 {
-            font-family: 'M PLUS Rounded 1c', 'Sawarabi Mincho', serif;
-            color: #8B0000;
-            font-size: 24px;
-            text-align: center;
-            margin: 40px 0 20px 0;
-            font-weight: normal;
+            background-color: #1a1a2e; /* ダークブルーの背景 */
+            color: #1a1a2e;
+            overflow: hidden; /* 粒子がはみ出ないように */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
+        /* 粒子アニメーション用のコンテナ */
+        .particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation-name: particle-flow;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        /* ログインフォーム */
         .login-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: #ffffff;
+            width: 90%;
             max-width: 400px;
-            margin: 80px auto;
-            padding: 30px 40px;
-            border-radius: 15px;
-            border: 3px solid #D2691E;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        /* ロゴ（円形） */
+        .logo-container {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 20px auto;
+            border-radius: 50%; /* 円形にする */
+            overflow: hidden;    /* はみ出た部分を隠す */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 画像の比率を保ちつつコンテナを埋める */
         }
 
         h1 {
-            color: #8B0000;
-            margin-bottom: 20px;
+            margin: 0 0 30px 0;
+            font-weight: 700;
+            font-size: 24px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
         }
 
         input[type="text"], input[type="password"] {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #999;
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 14px;
+            margin-bottom: 15px;
             border-radius: 8px;
             font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
         }
 
         button {
-            background: #D2691E;
+            background: #4a90e2;
             color: white;
-            padding: 10px 30px;
+            padding: 14px;
             border: none;
             border-radius: 8px;
             font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
+            transition: background-color 0.2s;
         }
 
         button:hover {
-            background: #a0522d;
+            background: #357abd;
         }
 
         p {
-            margin-top: 20px;
-            color: #444;
+            margin-top: 25px;
+            color: #666;
+            font-size: 14px;
         }
 
         a {
-            color: #8B0000;
+            color: #4a90e2;
             font-weight: bold;
             text-decoration: none;
         }
@@ -86,17 +152,48 @@
 
 <body>
 
+    <div class="particle-container"></div>
+
     <div class="login-container">
+        <div class="logo-container">
+            <img src="animal_talk_logo.png" alt="Animal Talk ロゴ">
+        </div>
+        
         <h1>ログイン</h1>
 
         <form method="POST" action="./login.php">
-            <input type="text" name="username" placeholder="ユーザー名" required><br>
-            <input type="password" name="password" placeholder="パスワード" required><br>
+            <input type="text" name="username" placeholder="ユーザー名" required>
+            <input type="password" name="password" placeholder="パスワード" required>
             <button type="submit">ログイン</button>
         </form>
     
         <p>はじめての方は <a href="./regform.html">こちら</a> から登録してください。</p>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.particle-container');
+            const particleCount = 50; // 粒子の数
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+
+                const size = Math.random() * 3 + 1; // 1pxから4pxのサイズ
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+
+                particle.style.left = `${Math.random() * 100}%`;
+                
+                // アニメーションの設定
+                const duration = Math.random() * 20 + 10; // 10秒から30秒
+                const delay = Math.random() * 20; // 0秒から20秒
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `-${delay}s`; // マイナスにすると開始タイミングがずれる
+
+                container.appendChild(particle);
+            }
+        });
+    </script>
 </body>
 </html>

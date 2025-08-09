@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <title>猫チャットAI</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'M PLUS Rounded 1c', sans-serif;
     background-color: #fff0f5;
     margin: 0;
     display: flex;
@@ -14,15 +15,19 @@ body {
 }
 header {
     background-color: #ffb6c1;
-    padding: 10px;
-    text-align: center;
-    font-size: 1.5em;
+    padding: 10px 20px; /* 少し余白を調整 */
     border-bottom: 3px solid #ff69b4;
+    /* ▼▼▼ 以下を追加 ▼▼▼ */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .chat-box {
     flex: 1;
     padding: 10px;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 .message {
     max-width: 70%;
@@ -66,10 +71,54 @@ button:hover {
     display: flex;
     flex-direction: column;
 }
+.header-title {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* ボタン間のスペース */
+}
+
+.nav-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #f48fb1;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    text-decoration: none; /* リンクの下線を消す */
+    font-size: 0.9em;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+.nav-btn:hover {
+    background-color: #ec407a;
+}
+
+.logout-btn {
+    background-color: #ef9a9a; /* ログアウトボタンだけ少し色を変える */
+}
+
+.logout-btn:hover {
+    background-color: #e57373;
+}
 </style>
 </head>
 <body>
-<header>🐾 猫AIチャット 🐾</header>
+<header>
+    <span class="header-title">🐾 猫AIチャット 🐾</span>
+    <div class="nav-buttons">
+        <a href="homepage.php" class="nav-btn">動物選択に戻る</a>
+        <form action="logout.php" method="POST" style="margin: 0;">
+            <button type="submit" class="nav-btn logout-btn">ログアウト</button>
+        </form>
+    </div>
+</header>
 <div class="chat-box" id="chatBox"></div>
 <div class="input-area">
     <input type="text" id="message" placeholder="にゃー？（入力してにゃ）">

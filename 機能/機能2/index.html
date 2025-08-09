@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>猫チャットAI</title>
+<style>
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #fff0f5;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+header {
+    background-color: #ffb6c1;
+    padding: 10px;
+    text-align: center;
+    font-size: 1.5em;
+    border-bottom: 3px solid #ff69b4;
+}
+.chat-box {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+}
+.message {
+    max-width: 70%;
+    margin: 8px 0;
+    padding: 10px;
+    border-radius: 15px;
+}
+.user {
+    background-color: #ffdab9;
+    align-self: flex-end;
+}
+.cat {
+    background-color: #ffe4e1;
+    align-self: flex-start;
+}
+.input-area {
+    display: flex;
+    padding: 10px;
+    border-top: 2px solid #ff69b4;
+}
+input {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #ff69b4;
+    border-radius: 20px;
+    outline: none;
+}
+button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #ff1493;
+}
+.chat-container {
+    display: flex;
+    flex-direction: column;
+}
+</style>
+</head>
+<body>
+<header>🐾 猫AIチャット 🐾</header>
+<div class="chat-box" id="chatBox"></div>
+<div class="input-area">
+    <input type="text" id="message" placeholder="にゃー？（入力してにゃ）">
+    <button onclick="sendMessage()">送信</button>
+</div>
+
+<script>
+async function sendMessage() {
+    const input = document.getElementById('message');
+    const message = input.value.trim();
+    if (!message) return;
+
+    addMessage(message, 'user');
+    input.value = '';
+
+    const res = await fetch('chat.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message})
+    });
+    const data = await res.json();
+
+    addMessage(data.reply || "にゃー？（エラーだにゃ）", 'cat');
+}
+
+function addMessage(text, type) {
+    const chatBox = document.getElementById('chatBox');
+    const msg = document.createElement('div');
+    msg.className = `message ${type}`;
+    msg.textContent = text;
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+</script>
+</body>
+</html>

@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['CONTENT_TYPE']) && 
     }
     $contents[] = ['role' => 'user', 'parts' => [['text' => $userMessage]]];
 
-    $apiKey = "AIzaSyACIpIfm4Bp46Uzi_nAwiNqGjwsxtKL8-o";
+    $apiKey = "自分のAPIキーをここに入力"; // 自分のAPIキーを設定してください
     $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}";
     $payload = json_encode(['contents' => $contents], JSON_UNESCAPED_UNICODE);
 

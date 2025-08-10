@@ -74,12 +74,8 @@ $selectedAnimalId = $_SESSION['animal_id'] ?? 0;
 @keyframes fade-in-out {
     0%, 100% { opacity: 0; } 50% { opacity: 1; }
 }
-body {
-    font-family: 'M PLUS Rounded 1c', sans-serif; margin: 0; padding: 0; color: var(--font-color);
-    background: linear-gradient(-45deg, var(--bg-gradient-start), var(--bg-gradient-end), #e1f5fe, #c8e6c9);
-    background-size: 400% 400%; animation: gradient-animation 15s ease infinite;
-    overflow-x: hidden; min-height: 100vh;
-}
+body { font-family: 'M PLUS Rounded 1c', sans-serif; background: #fff8e1; padding: 20px; text-align: center; }
+
 #paws-container {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     z-index: -1; pointer-events: none;

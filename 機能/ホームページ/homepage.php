@@ -61,9 +61,25 @@ input[type="submit"] { background: #ffb300; color: white; border: none; cursor: 
 input[type="submit"]:hover { background: #ffa000; }
 .error { color: red; margin-top: 10px; }
 .success { color: green; margin-top: 10px; }
+.logout-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 16px;
+    background-color: #dc3545;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.logout-btn:hover {
+    background-color: #c82333;
+}
 </style>
 </head>
 <body>
+<a href="logout.php" class="logout-btn">ログアウト</a>
 <div class="container">
     <h2>動物と性格を選んでね 🐾</h2>
 
